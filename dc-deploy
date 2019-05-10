@@ -10,7 +10,7 @@
 # this command assumes you already have docker on your
 # digital ocean vps
 
-dcdeploy() {
+dcDeploy() {
     ssh root@$1 \
         && git clone $2 $3 \
         && cd $3 \
@@ -23,11 +23,15 @@ dcdeploy() {
 # 1: digital ocean droplet IP
 # 2: repo name (must be what it is named in your server)
 
-dcrun() {
+dcRun() {
     ssh root@$1 'bash -s' < ./run-that-thing.sh $2
 }
 
 
 # will deploy to a fresh digital ocean server
 # installs docker / docker-compose and 
-# 
+# may need this command ssh -o StrictHostKeyChecking=no root@$1
+freshDockerDroplet() {
+    ssh root@$1 'bash -s' < ./fresh-docker-droplet.sh
+}
+
