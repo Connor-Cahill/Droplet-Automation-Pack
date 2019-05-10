@@ -35,3 +35,20 @@ freshDockerDroplet() {
     ssh root@$1 'bash -s' < ./fresh-docker-droplet.sh
 }
 
+# will setup fresh droplet with docker and docker-compose
+# then clone your app, secure copy over your .env into the VPS
+# and docker-compose up -d to ship app
+dockerFreshDeploy() {
+    VPS_IP=$1
+    PROJECT=$2
+    REPO_NAME=$3
+    ENV_FILE=$4
+
+    freshDockerDroplet $VPS_IP \
+        && git clone $PROJECT $REPO_NAME \
+        && exit
+    
+    scp $ENV_FILE root@$VPS_IP:$HOME/$REPO_NAME \
+        && ssh root@$1 'bash -s' < cd $HOME/$REPO_NAME && docker-compose up -d
+}
+
