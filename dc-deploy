@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# assumes you are using a digital ocean VPS
+
+
+
+# when calling function first input the github clone url
+# then input your Digital Ocean VPS IP
+# the third parameter is the directory name you wish to use
+# this command assumes you already have docker on your
+# digital ocean vps
+
+dcdeploy() {
+    ssh root@$1 \
+        && git clone $2 $3 \
+        && cd $3 \
+        && docker-compose up -d \
+        && "exit()"
+}
+
+# will ssh into server and start given app in background
+# inputs:
+# 1: digital ocean droplet IP
+# 2: repo name (must be what it is named in your server)
+
+dcrun() {
+    ssh root@$1 'bash -s' < ./run-that-thing.sh $2
+}
+
+
+# will deploy to a fresh digital ocean server
+# installs docker / docker-compose and 
+# 
