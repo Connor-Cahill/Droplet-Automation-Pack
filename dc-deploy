@@ -24,7 +24,7 @@ dcDeploy() {
 # 2: repo name (must be what it is named in your server)
 
 dcRun() {
-    ssh root@$1 'bash -s' < ./run-that-thing.sh $2
+    ssh root@$1 'bash -s' < $HOME/bin/droplet-automation/run-that-thing.sh $2
 }
 
 
@@ -32,22 +32,22 @@ dcRun() {
 # installs docker / docker-compose and 
 # may need this command ssh -o StrictHostKeyChecking=no root@$1
 freshDockerDroplet() {
-    ssh root@$1 'bash -s' < ./fresh-docker-droplet.sh
+    ssh root@$1 'bash -s' < $HOME/bin/droplet-automation/fresh-docker-droplet.sh
 }
+
 
 # will setup fresh droplet with docker and docker-compose
 # then clone your app, secure copy over your .env into the VPS
 # and docker-compose up -d to ship app
 dockerFreshDeploy() {
+
     VPS_IP=$1
     PROJECT=$2
     REPO_NAME=$3
     ENV_FILE=$4
 
-    freshDockerDroplet $VPS_IP \
-        && git clone $PROJECT $REPO_NAME \
-        && exit
-    
+    ssh root@$VPS_IP 'bash -s' < $HOME/bin/droplet-automation/docker-deploy-fresh.sh $VPS_FILE $PROJECT $REPO_NAME $ENV_FILE
+
     scp $ENV_FILE root@$VPS_IP:$HOME/$REPO_NAME \
         && ssh root@$1 'bash -s' < cd $HOME/$REPO_NAME && docker-compose up -d
 }
