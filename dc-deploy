@@ -27,6 +27,13 @@ dcRun() {
     ssh root@$1 'bash -s' < $HOME/bin/droplet-automation/run-that-thing.sh $2
 }
 
+# Will set up fresh Ubuntu Digital Ocean droplet
+# with custom install of Dokku 
+# required param is the public IP of your VPS
+freshDokkuDroplet() {
+    ssh root@$1 'bash -s' < $HOME/bin/droplet-automation/fresh-dokku-droplet.sh
+}
+
 
 # will deploy to a fresh digital ocean server
 # installs docker / docker-compose and 
